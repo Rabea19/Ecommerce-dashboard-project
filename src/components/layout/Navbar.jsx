@@ -5,9 +5,9 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="flex items-center justify-between bg-gray-800 px-6 py-4 border-b border-gray-700 shadow-sm">
+    <div className="flex flex-col sm:flex-row items-center justify-between bg-gray-800 px-4 sm:px-6 py-4 border-b border-gray-700 shadow-sm gap-3 sm:gap-0">
       {/* Search */}
-      <div className="flex items-center bg-gray-700 px-3 py-2 rounded-lg w-80">
+      <div className="flex items-center bg-gray-700 px-3 py-2 rounded-lg w-full sm:w-80">
         <Search size={18} className="text-gray-300" />
         <input
           type="text"
@@ -17,7 +17,7 @@ export default function Navbar() {
       </div>
 
       {/* Right Side */}
-      <div className="flex items-center gap-6 relative">
+      <div className="flex items-center gap-3 sm:gap-6 relative">
         {/* Dark Mode Button */}
         <button className="p-2 rounded-full hover:bg-gray-700 transition text-gray-300 hover:text-white">
           <Moon size={20} />
@@ -38,7 +38,7 @@ export default function Navbar() {
             className="flex items-center gap-2 hover:bg-gray-700 p-2 rounded-lg transition text-gray-300 hover:text-white"
           >
             <User size={20} />
-            <span className="font-medium text-sm">Admin</span>
+            <span className="font-medium text-sm hidden sm:block">Admin</span>
           </button>
 
           {isOpen && (

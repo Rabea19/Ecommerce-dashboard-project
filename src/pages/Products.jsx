@@ -12,7 +12,6 @@ export default function Products() {
   const [showForm, setShowForm] = useState(false);
   const [viewProduct, setViewProduct] = useState(null);
 
-  // Fetch
   const fetchProducts = async () => {
     const { data, error } = await supabase.from("products").select("*");
     if (!error) setProducts(data);
@@ -23,13 +22,11 @@ export default function Products() {
     fetchProducts();
   }, []);
 
-  // Add / Update
   const addProduct = async (e) => {
     e.preventDefault();
 
     let imageUrl = "";
 
-    // Upload Image if selected
     if (imageFile) {
       const fileName = `${Date.now()}_${imageFile.name}`;
 
@@ -47,7 +44,6 @@ export default function Products() {
     }
 
     if (editingId) {
-      // UPDATE
       const { error } = await supabase
         .from("products")
         .update({
@@ -68,7 +64,6 @@ export default function Products() {
         fetchProducts();
       }
     } else {
-      // INSERT
       const { error } = await supabase.from("products").insert([
         {
           name,
@@ -89,7 +84,6 @@ export default function Products() {
     }
   };
 
-  // Delete
   const deleteProduct = async (id) => {
     const { error } = await supabase.from("products").delete().eq("id", id);
 
@@ -98,7 +92,6 @@ export default function Products() {
 
   return (
     <div className="p-6">
-      {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold">Products</h2>
 
@@ -110,7 +103,6 @@ export default function Products() {
         </button>
       </div>
 
-      {/* Table */}
       <div className="overflow-x-auto bg-gray-800 rounded-lg shadow">
         <table className="w-full text-left">
           <thead className="bg-gray-700 text-gray-300 text-sm uppercase">
@@ -144,7 +136,6 @@ export default function Products() {
                 <td className="px-6 py-4">{product.stock}</td>
 
                 <td className="px-6 py-4 flex gap-4">
-                  {/* View */}
                   <button
                     onClick={() => setViewProduct(product)}
                     className="text-green-400 hover:text-green-300"
@@ -152,7 +143,6 @@ export default function Products() {
                     <Eye size={18} />
                   </button>
 
-                  {/* Edit */}
                   <button
                     onClick={() => {
                       setEditingId(product.id);
@@ -166,7 +156,6 @@ export default function Products() {
                     <Pencil size={18} />
                   </button>
 
-                  {/* Delete */}
                   <button
                     onClick={() => deleteProduct(product.id)}
                     className="text-red-400 hover:text-red-300"
@@ -180,7 +169,6 @@ export default function Products() {
         </table>
       </div>
 
-      {/* Add / Edit Modal */}
       {showForm && (
         <div
           onClick={() => setShowForm(false)}
@@ -188,7 +176,7 @@ export default function Products() {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-gray-900 rounded-xl p-6 w-[420px] shadow-xl"
+            className="bg-gray-900 rounded-xl p-6 w-[90%] sm:w-[420px] shadow-xl"
           >
             <form onSubmit={addProduct} className="space-y-4">
               <input
@@ -233,7 +221,6 @@ export default function Products() {
         </div>
       )}
 
-      {/* Full Screen View */}
       {viewProduct && (
         <div
           onClick={() => setViewProduct(null)}
@@ -241,9 +228,9 @@ export default function Products() {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-gray-900 w-[90%] h-[90%] rounded-2xl p-10 flex gap-10"
+            className="bg-gray-900 w-[90%] h-[90%] rounded-2xl p-5 lg:p-10 flex flex-col lg:flex-row gap-10"
           >
-            <div className="w-1/2 flex items-center justify-center">
+            <div className="w-full lg:w-1/2 flex items-center justify-center">
               {viewProduct.image && (
                 <img
                   src={viewProduct.image}
@@ -253,8 +240,10 @@ export default function Products() {
               )}
             </div>
 
-            <div className="w-1/2 flex flex-col justify-center space-y-6">
-              <h2 className="text-3xl font-bold">{viewProduct.name}</h2>
+            <div className="w-full lg:w-1/2 flex flex-col justify-center space-y-6">
+              <h2 className="text-xl lg:text-3xl font-bold">
+                {viewProduct.name}
+              </h2>
 
               <p className="text-xl text-gray-300">
                 Price: ${viewProduct.price}

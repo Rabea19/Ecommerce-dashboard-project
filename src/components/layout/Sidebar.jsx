@@ -1,25 +1,49 @@
 import { NavLink } from "react-router-dom";
 import { LayoutDashboard, Users, Package } from "lucide-react";
+import { useState } from "react";
 
 export default function Sidebar() {
-  return (
-    <div className="w-64 bg-gray-900 text-white p-6 space-y-6">
-      <h2 className="text-2xl font-bold">Admin Panel</h2>
+  const [open, setOpen] = useState(false);
 
-      <nav className="space-y-2">
-        <SidebarLink
-          to="/"
-          icon={<LayoutDashboard size={18} />}
-          label="Dashboard"
+  return (
+    <>
+      {/* Mobile Menu Button */}
+      <button
+        onClick={() => setOpen(true)}
+        className="lg:hidden fixed top-4 left-4 z-50 bg-gray-900 p-2 rounded-lg text-white"
+      >
+        ☰
+      </button>
+
+      {/* Overlay */}
+      {open && (
+        <div
+          onClick={() => setOpen(false)}
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
         />
-        <SidebarLink to="/users" icon={<Users size={18} />} label="Users" />
-        <SidebarLink
-          to="/products"
-          icon={<Package size={18} />}
-          label="Products"
-        />
-      </nav>
-    </div>
+      )}
+
+      <div
+        className={`fixed lg:static top-0 left-0 h-full w-64 bg-gray-900 text-white p-6 space-y-6 transform transition-transform duration-300 z-50
+        ${open ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
+      >
+        <h2 className="text-2xl font-bold">Admin Panel</h2>
+
+        <nav className="space-y-2">
+          <SidebarLink
+            to="/"
+            icon={<LayoutDashboard size={18} />}
+            label="Dashboard"
+          />
+          <SidebarLink to="/users" icon={<Users size={18} />} label="Users" />
+          <SidebarLink
+            to="/products"
+            icon={<Package size={18} />}
+            label="Products"
+          />
+        </nav>
+      </div>
+    </>
   );
 }
 
