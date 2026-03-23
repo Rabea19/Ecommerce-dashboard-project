@@ -102,7 +102,7 @@ export default function Products() {
         </button>
       </div>
 
-      <div className="w-full overflow-x-auto bg-gray-800 rounded-lg shadow">
+      <div className="overflow-x-auto bg-gray-800 rounded-lg shadow w-full">
         <table className="w-full text-left">
           <thead className="bg-gray-700 text-gray-300 text-xs md:text-sm uppercase">
             <tr>
@@ -168,7 +168,100 @@ export default function Products() {
         </table>
       </div>
 
-      {/* باقي الكود كما هو بدون أي تغيير */}
+      {showForm && (
+        <div
+          onClick={() => setShowForm(false)}
+          className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-gray-900 rounded-xl p-6 w-[90%] sm:w-[420px] shadow-xl"
+          >
+            <form onSubmit={addProduct} className="space-y-4">
+              <input
+                type="text"
+                placeholder="Product Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full bg-gray-800 p-2 rounded"
+              />
+
+              <input
+                type="number"
+                placeholder="Price"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                className="w-full bg-gray-800 p-2 rounded"
+              />
+
+              <input
+                type="number"
+                placeholder="Stock"
+                value={stock}
+                onChange={(e) => setStock(e.target.value)}
+                className="w-full bg-gray-800 p-2 rounded"
+              />
+
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setImageFile(e.target.files[0])}
+                className="w-full bg-gray-800 p-2 rounded"
+              />
+
+              <button
+                type="submit"
+                className="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded-lg"
+              >
+                {editingId ? "Update Product" : "Add Product"}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {viewProduct && (
+        <div
+          onClick={() => setViewProduct(null)}
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-gray-900 w-[90%] max-h-[90vh] overflow-y-auto rounded-2xl p-5 lg:p-10 flex flex-col lg:flex-row gap-10"
+          >
+            <div className="w-full lg:w-1/2 flex items-center justify-center">
+              {viewProduct.image && (
+                <img
+                  src={viewProduct.image}
+                  alt={viewProduct.name}
+                  className="max-h-full max-w-full object-contain rounded-xl"
+                />
+              )}
+            </div>
+
+            <div className="w-full lg:w-1/2 flex flex-col justify-center space-y-6">
+              <h2 className="text-xl lg:text-3xl font-bold">
+                {viewProduct.name}
+              </h2>
+
+              <p className="text-lg text-gray-300">
+                Price: ${viewProduct.price}
+              </p>
+
+              <p className="text-lg text-gray-300">
+                Stock: {viewProduct.stock}
+              </p>
+
+              <button
+                onClick={() => setViewProduct(null)}
+                className="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-lg w-fit"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

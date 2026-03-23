@@ -4,12 +4,12 @@ import Sidebar from "./Sidebar";
 
 export default function MainLayout() {
   return (
-    <div className="flex min-h-screen bg-gray-900 text-white overflow-x-hidden">
+    <div className="flex min-h-screen bg-gray-900 text-white">
       {/* Sidebar */}
       <Sidebar />
 
       {/* Content Area */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col w-full">
         <Navbar />
 
         <main className="flex-1 p-6 bg-gray-800">
