@@ -7,15 +7,31 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from "recharts";
-
-const data = [
-  { name: "Jan", revenue: 2000 },
-  { name: "Feb", revenue: 3000 },
-  { name: "Mar", revenue: 2500 },
-  { name: "Apr", revenue: 4000 },
-];
+import { useEffect, useState } from "react";
+import { supabase } from "../../lib/supabase";
 
 export default function AreaChartCard() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  async function fetchData() {
+    const { data: products, error } = await supabase
+      .from("products")
+      .select("*");
+
+    if (!error) {
+      const formatted = products.map((p) => ({
+        name: p.name,
+        revenue: p.price,
+      }));
+
+      setData(formatted);
+    }
+  }
+
   return (
     <div className="bg-gray-900 p-6 rounded-2xl shadow-lg">
       <h2 className="text-white text-lg mb-4">Revenue</h2>

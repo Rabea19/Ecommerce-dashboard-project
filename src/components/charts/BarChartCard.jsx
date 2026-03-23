@@ -7,16 +7,31 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from "recharts";
-
-const data = [
-  { name: "Mon", sales: 240 },
-  { name: "Tue", sales: 300 },
-  { name: "Wed", sales: 200 },
-  { name: "Thu", sales: 400 },
-  { name: "Fri", sales: 350 },
-];
+import { useEffect, useState } from "react";
+import { supabase } from "../../lib/supabase";
 
 export default function BarChartCard() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  async function fetchData() {
+    const { data: products, error } = await supabase
+      .from("products")
+      .select("*");
+
+    if (!error) {
+      const formatted = products.map((p) => ({
+        name: p.name,
+        sales: p.stock,
+      }));
+
+      setData(formatted);
+    }
+  }
+
   return (
     <div className="bg-gray-900 p-6 rounded-2xl shadow-lg">
       <h2 className="text-white text-lg mb-4">Weekly Sales</h2>

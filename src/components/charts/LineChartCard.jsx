@@ -7,16 +7,31 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from "recharts";
-
-const data = [
-  { name: "Jan", users: 400 },
-  { name: "Feb", users: 800 },
-  { name: "Mar", users: 600 },
-  { name: "Apr", users: 1200 },
-  { name: "May", users: 900 },
-];
+import { useEffect, useState } from "react";
+import { supabase } from "../../lib/supabase";
 
 export default function LineChartCard() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  async function fetchData() {
+    const { data: products, error } = await supabase
+      .from("products")
+      .select("*");
+
+    if (!error) {
+      const formatted = products.map((p) => ({
+        name: p.name,
+        users: p.stock,
+      }));
+
+      setData(formatted);
+    }
+  }
+
   return (
     <div className="bg-gray-900 p-6 rounded-2xl shadow-lg">
       <h2 className="text-white text-lg mb-4">Users Growth</h2>

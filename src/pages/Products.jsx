@@ -86,14 +86,13 @@ export default function Products() {
 
   const deleteProduct = async (id) => {
     const { error } = await supabase.from("products").delete().eq("id", id);
-
     if (!error) fetchProducts();
   };
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold">Products</h2>
+    <div className="p-4 md:p-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-3">
+        <h2 className="text-lg md:text-xl font-semibold">Products</h2>
 
         <button
           onClick={() => setShowForm(true)}
@@ -105,13 +104,13 @@ export default function Products() {
 
       <div className="overflow-x-auto bg-gray-800 rounded-lg shadow">
         <table className="w-full text-left">
-          <thead className="bg-gray-700 text-gray-300 text-sm uppercase">
+          <thead className="bg-gray-700 text-gray-300 text-xs md:text-sm uppercase">
             <tr>
-              <th className="px-6 py-3">Image</th>
-              <th className="px-6 py-3">Name</th>
-              <th className="px-6 py-3">Price</th>
-              <th className="px-6 py-3">Stock</th>
-              <th className="px-6 py-3">Actions</th>
+              <th className="px-3 md:px-6 py-3">Image</th>
+              <th className="px-3 md:px-6 py-3">Name</th>
+              <th className="px-3 md:px-6 py-3">Price</th>
+              <th className="px-3 md:px-6 py-3">Stock</th>
+              <th className="px-3 md:px-6 py-3">Actions</th>
             </tr>
           </thead>
 
@@ -121,21 +120,21 @@ export default function Products() {
                 key={product.id}
                 className="border-b border-gray-700 hover:bg-gray-700 transition"
               >
-                <td className="px-6 py-4">
+                <td className="px-3 md:px-6 py-4">
                   {product.image && (
                     <img
                       src={product.image}
                       alt={product.name}
-                      className="w-12 h-12 object-cover rounded"
+                      className="w-10 h-10 md:w-12 md:h-12 object-cover rounded"
                     />
                   )}
                 </td>
 
-                <td className="px-6 py-4">{product.name}</td>
-                <td className="px-6 py-4">${product.price}</td>
-                <td className="px-6 py-4">{product.stock}</td>
+                <td className="px-3 md:px-6 py-4">{product.name}</td>
+                <td className="px-3 md:px-6 py-4">${product.price}</td>
+                <td className="px-3 md:px-6 py-4">{product.stock}</td>
 
-                <td className="px-6 py-4 flex gap-4">
+                <td className="px-3 md:px-6 py-4 flex gap-2 md:gap-4">
                   <button
                     onClick={() => setViewProduct(product)}
                     className="text-green-400 hover:text-green-300"
@@ -228,7 +227,7 @@ export default function Products() {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-gray-900 w-[90%] h-[90%] rounded-2xl p-5 lg:p-10 flex flex-col lg:flex-row gap-10"
+            className="bg-gray-900 w-[90%] max-h-[90vh] overflow-y-auto rounded-2xl p-5 lg:p-10 flex flex-col lg:flex-row gap-10"
           >
             <div className="w-full lg:w-1/2 flex items-center justify-center">
               {viewProduct.image && (
@@ -245,11 +244,11 @@ export default function Products() {
                 {viewProduct.name}
               </h2>
 
-              <p className="text-xl text-gray-300">
+              <p className="text-lg text-gray-300">
                 Price: ${viewProduct.price}
               </p>
 
-              <p className="text-xl text-gray-300">
+              <p className="text-lg text-gray-300">
                 Stock: {viewProduct.stock}
               </p>
 
