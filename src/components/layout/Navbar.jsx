@@ -1,8 +1,34 @@
-import { Search, Bell, Moon, User } from "lucide-react";
-import { useState } from "react";
+import { Search, Bell, Moon, User, LogIn, LogOut } from "lucide-react";
+import { useState, useEffect } from "react";
+import { supabase } from "../../lib/supabase";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // تحقق من حالة تسجيل الدخول عند تحميل الصفحة
+    const session = supabase.auth.getSession().then(({ data }) => {
+      setUser(data.session?.user || null);
+    });
+
+    // حدث الاشتراك لتحديث المستخدم عند تسجيل الدخول/الخروج
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session?.user || null);
+      },
+    );
+
+    return () => listener.subscription.unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+    navigate("/login");
+  };
 
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between bg-gray-800 px-4 sm:px-6 py-4 border-b border-gray-700 shadow-sm gap-3 sm:gap-0">
@@ -18,7 +44,7 @@ export default function Navbar() {
 
       {/* Right Side */}
       <div className="flex items-center gap-3 sm:gap-6 relative">
-        {/* Dark Mode Button */}
+        {/* Dark Mode */}
         <button className="p-2 rounded-full hover:bg-gray-700 transition text-gray-300 hover:text-white">
           <Moon size={20} />
         </button>
@@ -31,27 +57,38 @@ export default function Navbar() {
           </span>
         </button>
 
-        {/* User Dropdown */}
-        <div className="relative">
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="flex items-center gap-2 hover:bg-gray-700 p-2 rounded-lg transition text-gray-300 hover:text-white"
-          >
-            <User size={20} />
-            <span className="font-medium text-sm hidden sm:block">Admin</span>
-          </button>
+        {/* User/Profile */}
+        {user ? (
+          <div className="relative">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="flex items-center gap-2 hover:bg-gray-700 p-2 rounded-lg transition text-gray-300 hover:text-white"
+            >
+              <User size={20} />
+              <span className="font-medium text-sm hidden sm:block">
+                {user.email}
+              </span>
+            </button>
 
-          {isOpen && (
-            <div className="absolute right-0 mt-2 w-40 bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-2">
-              <button className="block w-full text-left px-3 py-2 hover:bg-gray-700 rounded text-gray-300 hover:text-white">
-                Profile
-              </button>
-              <button className="block w-full text-left px-3 py-2 hover:bg-gray-700 rounded text-gray-300 hover:text-white">
-                Logout
-              </button>
-            </div>
-          )}
-        </div>
+            {isOpen && (
+              <div className="absolute right-0 mt-2 w-40 bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-2">
+                <button
+                  onClick={handleLogout}
+                  className="block w-full text-left px-3 py-2 hover:bg-gray-700 rounded text-gray-300 hover:text-white flex items-center gap-2"
+                >
+                  <LogOut size={16} /> Logout
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <button
+            onClick={() => navigate("/login")}
+            className="flex items-center gap-2 bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-700"
+          >
+            <LogIn size={16} /> Login / Signup
+          </button>
+        )}
       </div>
     </div>
   );

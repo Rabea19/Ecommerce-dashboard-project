@@ -1,48 +1,46 @@
+import { useEffect, useState } from "react";
+import { supabase } from "../../lib/supabase";
 import {
   BarChart,
   Bar,
   XAxis,
   YAxis,
-  Tooltip,
   CartesianGrid,
+  Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { useEffect, useState } from "react";
-import { supabase } from "../../lib/supabase";
 
 export default function BarChartCard() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
+    const fetchData = async () => {
+      const { data: products, error } = await supabase
+        .from("products")
+        .select("*");
+      if (!error) {
+        const chartData = products.map((p) => ({
+          name: p.name,
+          stock: Number(p.stock),
+        }));
+        setData(chartData);
+      } else {
+        console.log(error);
+      }
+    };
     fetchData();
   }, []);
 
-  async function fetchData() {
-    const { data: products, error } = await supabase
-      .from("products")
-      .select("*");
-
-    if (!error) {
-      const formatted = products.map((p) => ({
-        name: p.name,
-        sales: p.stock,
-      }));
-
-      setData(formatted);
-    }
-  }
-
   return (
-    <div className="bg-gray-900 p-6 rounded-2xl shadow-lg">
-      <h2 className="text-white text-lg mb-4">Weekly Sales</h2>
-
-      <ResponsiveContainer width="100%" height={300}>
+    <div className="bg-gray-800 rounded-lg p-4">
+      <h3 className="font-semibold mb-2">Stock Bar Chart</h3>
+      <ResponsiveContainer width="100%" height={250}>
         <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-          <XAxis dataKey="name" stroke="#aaa" />
-          <YAxis stroke="#aaa" />
+          <CartesianGrid stroke="#555" strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
           <Tooltip />
-          <Bar dataKey="sales" fill="#10b981" radius={[8, 8, 0, 0]} />
+          <Bar dataKey="stock" fill="#10b981" />
         </BarChart>
       </ResponsiveContainer>
     </div>

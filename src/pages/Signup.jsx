@@ -3,16 +3,16 @@ import { supabase } from "../lib/supabase";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
-export default function Login() {
+export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     toast.dismiss();
 
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
     });
@@ -20,10 +20,10 @@ export default function Login() {
     if (error) {
       toast.error(error.message);
     } else {
-      toast.success("Logged in successfully!");
+      toast.success("Sign up successful! Check your email to confirm.");
       setEmail("");
       setPassword("");
-      navigate("/");
+      navigate("/login");
     }
   };
 
@@ -42,12 +42,10 @@ export default function Login() {
       />
 
       <form
-        onSubmit={handleLogin}
+        onSubmit={handleSignup}
         className="bg-gray-800 p-8 rounded-xl flex flex-col gap-4 w-full max-w-sm"
       >
-        <h2 className="text-xl font-bold text-white text-center">
-          Admin Login
-        </h2>
+        <h2 className="text-xl font-bold text-white text-center">Sign Up</h2>
 
         <input
           type="email"
@@ -68,17 +66,17 @@ export default function Login() {
 
         <button
           type="submit"
-          className="bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg"
+          className="bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg"
         >
-          Login
+          Sign Up
         </button>
 
         <button
           type="button"
-          onClick={() => navigate("/signup")}
+          onClick={() => navigate("/login")}
           className="text-gray-300 hover:text-white underline mt-2"
         >
-          Sign Up
+          Back to Login
         </button>
       </form>
     </div>

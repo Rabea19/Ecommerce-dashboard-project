@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import MainLayout from "./components/layout/MainLayout";
 import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import { Toaster } from "react-hot-toast";
 
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Users = lazy(() => import("./pages/Users"));
@@ -16,19 +18,29 @@ export default function App() {
     <BrowserRouter>
       <Suspense fallback={<Loading />}>
         <Routes>
-          {/* اللوجين خارج اللياوت */}
           <Route path="/login" element={<Login />} />
-
-          {/* كل صفحات الأدمن جوه MainLayout */}
+          <Route path="/signup" element={<Signup />} />
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="users" element={<Users />} />
             <Route path="products" element={<Products />} />
           </Route>
-
-          {/* متضيفش أي Route path="*" بيحوّل على /login */}
         </Routes>
       </Suspense>
+
+      {/* 🟢 Toaster أسفل في المنتصف */}
+      <Toaster
+        position="bottom-center"
+        reverseOrder={false} // الجديد يظهر بعد القديم وليس فوقه
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: "#1f2937",
+            color: "#fff",
+            textAlign: "center",
+          },
+        }}
+      />
     </BrowserRouter>
   );
 }

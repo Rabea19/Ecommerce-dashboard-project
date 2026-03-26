@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { Eye, Pencil, Trash2 } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -55,6 +56,7 @@ export default function Products() {
         .eq("id", editingId);
 
       if (!error) {
+        toast.success("Product updated successfully");
         setEditingId(null);
         setName("");
         setPrice("");
@@ -74,6 +76,7 @@ export default function Products() {
       ]);
 
       if (!error) {
+        toast.success("Product added successfully");
         setName("");
         setPrice("");
         setStock("");
@@ -85,8 +88,16 @@ export default function Products() {
   };
 
   const deleteProduct = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this product?",
+    );
+    if (!confirmDelete) return;
+
     const { error } = await supabase.from("products").delete().eq("id", id);
-    if (!error) fetchProducts();
+    if (!error) {
+      toast.success("Product deleted");
+      fetchProducts();
+    }
   };
 
   return (
@@ -102,7 +113,7 @@ export default function Products() {
         </button>
       </div>
 
-      <div className="overflow-x-auto bg-gray-800 rounded-lg shadow w-full">
+      <div className="hidden md:block overflow-x-auto bg-gray-800 rounded-lg shadow w-full">
         <table className="w-full text-left">
           <thead className="bg-gray-700 text-gray-300 text-xs md:text-sm uppercase">
             <tr>
@@ -166,6 +177,59 @@ export default function Products() {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile Cards */}
+      <div className="md:hidden space-y-4">
+        {products.map((product) => (
+          <div
+            key={product.id}
+            className="bg-gray-800 rounded-lg p-4 flex gap-4 items-center"
+          >
+            {product.image && (
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-16 h-16 object-cover rounded"
+              />
+            )}
+
+            <div className="flex-1">
+              <h3 className="font-semibold">{product.name}</h3>
+              <p className="text-sm text-gray-400">Price: ${product.price}</p>
+              <p className="text-sm text-gray-400">Stock: {product.stock}</p>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setViewProduct(product)}
+                className="text-green-400"
+              >
+                <Eye size={18} />
+              </button>
+
+              <button
+                onClick={() => {
+                  setEditingId(product.id);
+                  setName(product.name);
+                  setPrice(product.price);
+                  setStock(product.stock);
+                  setShowForm(true);
+                }}
+                className="text-blue-400"
+              >
+                <Pencil size={18} />
+              </button>
+
+              <button
+                onClick={() => deleteProduct(product.id)}
+                className="text-red-400"
+              >
+                <Trash2 size={18} />
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
 
       {showForm && (

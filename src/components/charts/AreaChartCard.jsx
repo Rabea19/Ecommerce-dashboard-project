@@ -1,53 +1,57 @@
+import { useEffect, useState } from "react";
+import { supabase } from "../../lib/supabase";
 import {
   AreaChart,
   Area,
   XAxis,
   YAxis,
-  Tooltip,
   CartesianGrid,
+  Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { useEffect, useState } from "react";
-import { supabase } from "../../lib/supabase";
 
 export default function AreaChartCard() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
+    const fetchData = async () => {
+      const { data: products, error } = await supabase
+        .from("products")
+        .select("*");
+      if (!error) {
+        const chartData = products.map((p) => ({
+          name: p.name,
+          price: Number(p.price),
+          stock: Number(p.stock),
+        }));
+        setData(chartData);
+      } else {
+        console.log(error);
+      }
+    };
     fetchData();
   }, []);
 
-  async function fetchData() {
-    const { data: products, error } = await supabase
-      .from("products")
-      .select("*");
-
-    if (!error) {
-      const formatted = products.map((p) => ({
-        name: p.name,
-        revenue: p.price,
-      }));
-
-      setData(formatted);
-    }
-  }
-
   return (
-    <div className="bg-gray-900 p-6 rounded-2xl shadow-lg">
-      <h2 className="text-white text-lg mb-4">Revenue</h2>
-
-      <ResponsiveContainer width="100%" height={300}>
+    <div className="bg-gray-800 rounded-lg p-4">
+      <h3 className="font-semibold mb-2">Price & Stock Area Chart</h3>
+      <ResponsiveContainer width="100%" height={250}>
         <AreaChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-          <XAxis dataKey="name" stroke="#aaa" />
-          <YAxis stroke="#aaa" />
+          <CartesianGrid stroke="#555" strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
           <Tooltip />
           <Area
             type="monotone"
-            dataKey="revenue"
-            stroke="#8b5cf6"
-            fill="#8b5cf6"
-            fillOpacity={0.3}
+            dataKey="price"
+            stroke="#3b82f6"
+            fill="#3b82f6"
+          />
+          <Area
+            type="monotone"
+            dataKey="stock"
+            stroke="#10b981"
+            fill="#10b981"
           />
         </AreaChart>
       </ResponsiveContainer>
