@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { LayoutDashboard, Users, Package } from "lucide-react";
+import { LayoutDashboard, Users, Package, Layers } from "lucide-react";
 import { useState } from "react";
 
 export default function Sidebar() {
@@ -40,6 +40,11 @@ export default function Sidebar() {
             to="/products"
             icon={<Package size={18} />}
             label="Products"
+          />
+          <SidebarLink
+            to="/catalog"
+            icon={<Layers size={18} />}
+            label="Catalog"
           />
         </nav>
       </div>
