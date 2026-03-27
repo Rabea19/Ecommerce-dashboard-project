@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
 import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -35,18 +35,6 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900">
-      <Toaster
-        position="bottom-center"
-        toastOptions={{
-          duration: 3000,
-          style: {
-            background: "#1f2937",
-            color: "#fff",
-            textAlign: "center",
-          },
-        }}
-      />
-
       <form
         onSubmit={handleLogin}
         className="bg-gray-800 p-8 rounded-xl flex flex-col gap-4 w-full max-w-sm"
