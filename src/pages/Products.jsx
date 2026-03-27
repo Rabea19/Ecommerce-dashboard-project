@@ -170,7 +170,7 @@ export default function Products() {
                     onClick={() => deleteProduct(product.id)}
                     className="text-red-400 hover:text-red-300"
                   >
-                    <Trash2 size={18} />
+                    <h2 size={18} />
                   </button>
                 </td>
               </tr>

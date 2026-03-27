@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import MainLayout from "./components/layout/MainLayout";
 import Login from "./pages/Login";
-import Signup from "./pages/Signup";
 import { Toaster } from "react-hot-toast";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -21,7 +20,6 @@ export default function App() {
       <Suspense fallback={<Loading />}>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
           <Route path="/" element={<MainLayout />}>
             <Route
               index
@@ -59,10 +57,11 @@ export default function App() {
         </Routes>
       </Suspense>
 
-      {/* 🟢 Toaster أسفل في المنتصف */}
+      {/* 🟢 Toaster ثابت أعلى كل العناصر */}
       <Toaster
         position="bottom-center"
-        reverseOrder={false} // الجديد يظهر بعد القديم وليس فوقه
+        containerStyle={{ zIndex: 9999 }}
+        reverseOrder={false}
         toastOptions={{
           duration: 3000,
           style: {
