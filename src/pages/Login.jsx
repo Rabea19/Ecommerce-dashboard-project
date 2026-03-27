@@ -10,7 +10,7 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    toast.dismiss();
+    toast.dismiss(); // إزالة أي توست مفتوح سابقًا
 
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
@@ -20,9 +20,15 @@ export default function Login() {
     if (error) {
       toast.error(error.message);
     } else {
-      toast.success("Logged in successfully!");
       setEmail("");
       setPassword("");
+
+      // 🟢 إظهار التوست مباشرة
+      toast.success("Logged in successfully!", {
+        duration: 2000,
+      });
+
+      // 🟢 الانتقال مباشرة للصفحة الرئيسية
       navigate("/");
     }
   };
