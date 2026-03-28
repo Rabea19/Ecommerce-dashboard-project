@@ -8,6 +8,7 @@ export default function Products() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
+  const [category, setCategory] = useState("Mobiles");
   const [imageFile, setImageFile] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -51,6 +52,7 @@ export default function Products() {
           name,
           price: Number(price),
           stock: Number(stock),
+          category,
           image: imageUrl || products.find((p) => p.id === editingId)?.image,
         })
         .eq("id", editingId);
@@ -61,6 +63,7 @@ export default function Products() {
         setName("");
         setPrice("");
         setStock("");
+        setCategory("Mobiles");
         setImageFile(null);
         setShowForm(false);
         fetchProducts();
@@ -71,6 +74,7 @@ export default function Products() {
           name,
           price: Number(price),
           stock: Number(stock),
+          category,
           image: imageUrl,
         },
       ]);
@@ -80,6 +84,7 @@ export default function Products() {
         setName("");
         setPrice("");
         setStock("");
+        setCategory("Mobiles");
         setImageFile(null);
         setShowForm(false);
         fetchProducts();
@@ -121,6 +126,7 @@ export default function Products() {
               <th className="px-3 md:px-6 py-3">Name</th>
               <th className="px-3 md:px-6 py-3">Price</th>
               <th className="px-3 md:px-6 py-3">Stock</th>
+              <th className="px-3 md:px-6 py-3">Category</th>
               <th className="px-3 md:px-6 py-3">Actions</th>
             </tr>
           </thead>
@@ -144,6 +150,7 @@ export default function Products() {
                 <td className="px-3 md:px-6 py-4">{product.name}</td>
                 <td className="px-3 md:px-6 py-4">${product.price}</td>
                 <td className="px-3 md:px-6 py-4">{product.stock}</td>
+                <td className="px-3 md:px-6 py-4">{product.category}</td>
 
                 <td className="px-3 md:px-6 py-4 flex gap-2 md:gap-4">
                   <button
@@ -159,6 +166,7 @@ export default function Products() {
                       setName(product.name);
                       setPrice(product.price);
                       setStock(product.stock);
+                      setCategory(product.category || "Mobiles");
                       setShowForm(true);
                     }}
                     className="text-blue-400 hover:text-blue-300"
@@ -170,7 +178,7 @@ export default function Products() {
                     onClick={() => deleteProduct(product.id)}
                     className="text-red-400 hover:text-red-300"
                   >
-                    <h2 size={18} />
+                    <Trash2 size={18} />
                   </button>
                 </td>
               </tr>
@@ -198,6 +206,9 @@ export default function Products() {
               <h3 className="font-semibold">{product.name}</h3>
               <p className="text-sm text-gray-400">Price: ${product.price}</p>
               <p className="text-sm text-gray-400">Stock: {product.stock}</p>
+              <p className="text-sm text-gray-400">
+                Category: {product.category}
+              </p>
             </div>
 
             <div className="flex gap-3">
@@ -214,6 +225,7 @@ export default function Products() {
                   setName(product.name);
                   setPrice(product.price);
                   setStock(product.stock);
+                  setCategory(product.category || "Mobiles");
                   setShowForm(true);
                 }}
                 className="text-blue-400"
@@ -266,6 +278,17 @@ export default function Products() {
                 className="w-full bg-gray-800 p-2 rounded"
               />
 
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full bg-gray-800 p-2 rounded"
+              >
+                <option value="Mobiles">Mobiles</option>
+                <option value="Laptops">Laptops</option>
+                <option value="Accessories">Accessories</option>
+                <option value="Tablets">Tablets</option>
+              </select>
+
               <input
                 type="file"
                 accept="image/*"
@@ -314,6 +337,10 @@ export default function Products() {
 
               <p className="text-lg text-gray-300">
                 Stock: {viewProduct.stock}
+              </p>
+
+              <p className="text-lg text-gray-300">
+                Category: {viewProduct.category}
               </p>
 
               <button
