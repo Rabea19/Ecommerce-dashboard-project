@@ -9,6 +9,8 @@ const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Users = lazy(() => import("./pages/Users"));
 const Products = lazy(() => import("./pages/Products"));
 const Catalog = lazy(() => import("./pages/Catalog"));
+const Orders = lazy(() => import("./pages/Orders"));
+const OrderDetails = lazy(() => import("./pages/OrderDetails"));
 
 function Loading() {
   return <div className="text-white p-8">Loading...</div>;
@@ -50,6 +52,22 @@ export default function App() {
               element={
                 <ProtectedRoute>
                   <Catalog />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="orders"
+              element={
+                <ProtectedRoute>
+                  <Orders />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="orders/:id"
+              element={
+                <ProtectedRoute>
+                  <OrderDetails />
                 </ProtectedRoute>
               }
             />

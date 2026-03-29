@@ -46,6 +46,11 @@ export default function Sidebar() {
             icon={<Layers size={18} />}
             label="Catalog"
           />
+          <SidebarLink
+            to="/orders"
+            icon={<Layers size={18} />}
+            label="Orders"
+          />
         </nav>
       </div>
     </>
