@@ -5,6 +5,7 @@ import AreaChartCard from "../components/charts/AreaChartCard";
 import CategoryStats from "../components/CategoryStats";
 import LowStockAlert from "../components/LowStockAlert";
 import ProductAnalytics from "../components/ProductAnalytics";
+import OrdersProfitChart from "../components/charts/OrdersProfitChart";
 
 export default function Dashboard() {
   return (
@@ -14,6 +15,7 @@ export default function Dashboard() {
       <ProductAnalytics />
       <LineChartCard />
       <BarChartCard />
+      <OrdersProfitChart />
       <PieChartCard />
       <AreaChartCard />
     </div>
